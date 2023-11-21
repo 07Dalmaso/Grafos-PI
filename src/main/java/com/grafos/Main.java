@@ -20,8 +20,6 @@ public class Main {
                 System.out.println((i + 1) + ". " + labyrinths[i]);
             }
             System.out.print("----------------------------------------------------------------------------------\n");
-            System.out.print("Digite o ID: ");
-            String id = scanner.nextLine();
 
             int labyrinthNumber = 0;
             while (true) {
@@ -39,6 +37,9 @@ public class Main {
             }
             String maze = labyrinths[labyrinthNumber - 1];
             System.out.println("Você selecionou o labirinto: " + maze);
+            System.out.print("Para executar a API, é necessário fornecer um ‘ID’.\n");
+            System.out.print("Digite o ID: ");
+            String id = scanner.nextLine();
             long execuçaoInicial  = System.currentTimeMillis();
             long tempoAtualEmSegundos = execuçaoInicial / 1000;
             Resultados resultados = new Resultados(id, maze);

@@ -1,7 +1,6 @@
 package com.grafos.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class resultadoGrafoApi {
@@ -19,11 +18,11 @@ public class resultadoGrafoApi {
         return posAtual;
     }
 
-    public boolean isInicio() {
+    public boolean inicio() {
         return inicio;
     }
 
-    public boolean isFinal() {
+    public boolean fim() {
         return fim;
     }
 

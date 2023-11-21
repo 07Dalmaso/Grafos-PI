@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import static com.grafos.model.Bfs.BFS;
+import java.util.Iterator;
 
 public class Resultados {
     public static String id;
@@ -34,20 +35,17 @@ public class Resultados {
         try {
 
             Map<Integer, List<Integer>> adjacencyList = solucaoMapeada.grafo(id, maze).getListaAdj();
-            System.out.println("------------Grafo Mapeado---------------------------------------------------------");
+            System.out.println("------------Grafo Mapeado--------------------------------------------------------------");
             System.out.println(adjacencyList);
             String jsonData = adjacencyList.toString();
             String output = convertendoFormato(jsonData);
-            String totalValores = String.valueOf(contarVertices(output));
-            System.out.println("------------Quantidade de Vértices-----------------------------------------------");
-            System.out.println("Total: " + totalValores);
+            Result result = contarVertices(output);
+            int totalVertices = result.getTotalVertices();
+            String lastKey = result.getLastKey();
+            System.out.println("------------Quantidade de Vértices----------------------------------------------------");
+            System.out.println("Total: " + totalVertices);
 
-            int v = 0;
-            if (Integer.parseInt(totalValores) > 1000) {
-                v = 7006;
-            } else {
-                v = Integer.parseInt(totalValores) + 1;
-            }
+            int v = Integer.parseInt(lastKey) + 1;
 
             ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>(v);
             for (int i = 0; i < v; i++) {
@@ -75,14 +73,40 @@ public class Resultados {
         return "{\n" + input + "\n}";
     }
 
-    private static int contarVertices(String jsonString) throws IOException {
+
+    private static Result contarVertices(String jsonString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(jsonString);
 
         int totalVertices = jsonNode.size();
 
-        return totalVertices;
+        String lastKey = "";
+        Iterator<String> keys = jsonNode.fieldNames();
+        while(keys.hasNext()){
+            lastKey = keys.next();
+        }
+
+        return new Result(totalVertices, lastKey);
     }
+
+    static class Result {
+        private final int totalVertices;
+        private final String lastKey;
+
+        public Result(int totalVertices, String lastKey) {
+            this.totalVertices = totalVertices;
+            this.lastKey = lastKey;
+        }
+
+        public int getTotalVertices() {
+            return totalVertices;
+        }
+
+        public String getLastKey() {
+            return lastKey;
+        }
+    }
+
 
     static void caminhoMaisCurto(ArrayList<ArrayList<Integer>> adj, int s, int dest, int v, List<Integer> resultList) throws Exception {
 
@@ -90,7 +114,7 @@ public class Resultados {
         int dist[] = new int[v];
 
         if (BFS(adj, s, dest, v, pred, dist) == false) {
-            System.out.println("Given source and destination" + " are not connected");
+            System.out.println("A origem e o destino fornecidos não estão conectados.");
             return;
         }
 

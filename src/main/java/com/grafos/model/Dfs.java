@@ -22,34 +22,34 @@ public class Dfs {
 
     }
 
-    public Mapeando grafo(String user, String labyrinth) throws IOException {
-        resultadoGrafoApi starting = resultadoApi.iniciarLabirinto(user, labyrinth);
+    public Mapeando grafo(String id, String labirinto) throws IOException {
+        resultadoGrafoApi montadoGrafo = resultadoApi.iniciarLabirinto(id, labirinto);
 
-        dfs(user, labyrinth, starting);
+        dfs(id, labirinto, montadoGrafo);
         return grafo;
     }
 
-    private void dfs(String user, String labirinth, resultadoGrafoApi currentPosition) throws IOException {
-        visitado.add(currentPosition.getPosAtual());
+    private void dfs(String id, String labirinto, resultadoGrafoApi posicaoAtual) throws IOException {
+        visitado.add(posicaoAtual.getPosAtual());
 
-        if (currentPosition.isInicio()) {
-             inicio = currentPosition.getPosAtual();
-        } else if (currentPosition.isFinal()) {
-             fim = currentPosition.getPosAtual();
+        if (posicaoAtual.inicio()) {
+             inicio = posicaoAtual.getPosAtual();
+        } else if (posicaoAtual.fim()) {
+             fim = posicaoAtual.getPosAtual();
         }
 
-        grafo.construirGrafo(List.of(currentPosition));
-        caminho.push(currentPosition);
+        grafo.construirGrafo(List.of(posicaoAtual));
+        caminho.push(posicaoAtual);
 
-        for (int newPosition : currentPosition.getMovimentos()) {
-            if (!visitado.contains(newPosition)) {
-                resultadoGrafoApi moveResponse = resultadoApi.movimentarLabirinto(user, labirinth, newPosition);
-                dfs(user, labirinth, moveResponse);
+        for (int novaPosicao: posicaoAtual.getMovimentos()) {
+            if (!visitado.contains(novaPosicao)) {
+                resultadoGrafoApi moveResponse = resultadoApi.movimentarLabirinto(id, labirinto, novaPosicao);
+                dfs(id, labirinto, moveResponse);
             }
         }
         caminho.pop();
         if (caminho.size() - 1 >= 0) {
-            resultadoApi.movimentarLabirinto(user, labirinth, caminho.get(caminho.size() - 1).getPosAtual());
+            resultadoApi.movimentarLabirinto(id, labirinto, caminho.get(caminho.size() - 1).getPosAtual());
         }
 
     }

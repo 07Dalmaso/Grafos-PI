@@ -1,8 +1,6 @@
 package com.grafos.response;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class resultadoValidacaoApi {
 
     @JsonProperty("caminho_valido")
@@ -17,7 +15,6 @@ public class resultadoValidacaoApi {
         this.caminhoValido = caminhoValido;
         this.movimentos = movimentos;
     }
-
 
     @Override
     public String toString() {
